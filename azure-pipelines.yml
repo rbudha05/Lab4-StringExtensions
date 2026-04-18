@@ -34,7 +34,7 @@ steps:
     command: 'push'
     packagesToPush: '$(packageOutput)\*.nupkg;!$(packageOutput)\*.symbols.nupkg'
     nuGetFeedType: 'internal'
-    publishVstsFeed: 'Lab4Feed'
+    publishVstsFeed: 'Lab4-StringExtensions/Lab4Feed'
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish build artifacts'

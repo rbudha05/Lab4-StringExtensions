@@ -6,7 +6,7 @@
   <Nullable>enable</Nullable>
 
   <PackageId>Rohit.StringLibrary</PackageId>
-  <Version>1.0.1</Version>
+  <Version>1.0.2</Version>
   <Authors>Rohit Budha</Authors>
   <Description>String extension library for checking uppercase start.</Description>
 </PropertyGroup>

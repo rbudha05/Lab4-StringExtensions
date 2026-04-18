@@ -1,0 +1,44 @@
+trigger:
+- main
+
+pool:
+  name: 'Lab4Pool'
+
+variables:
+  buildConfiguration: 'Release'
+  projectPath: '**/StringExtensionsLibrary.csproj'
+  packageOutput: '$(Build.ArtifactStagingDirectory)/packages'
+
+steps:
+- task: UseDotNet@2
+  displayName: 'Install .NET 8 SDK'
+  inputs:
+    packageType: 'sdk'
+    version: '8.0.x'
+
+- script: dotnet restore
+  displayName: 'Restore packages'
+
+- script: dotnet build $(projectPath) --configuration $(buildConfiguration)
+  displayName: 'Build class library'
+
+- script: dotnet pack $(projectPath) --configuration $(buildConfiguration) --output $(packageOutput)
+  displayName: 'Pack NuGet package'
+
+- task: NuGetAuthenticate@1
+  displayName: 'Authenticate to Azure Artifacts'
+
+- task: NuGetCommand@2
+  displayName: 'Push package to Azure Artifacts Feed'
+  inputs:
+    command: 'push'
+    packagesToPush: '$(packageOutput)/*.nupkg;!$(packageOutput)/*.symbols.nupkg'
+    nuGetFeedType: 'internal'
+    publishVstsFeed: 'Lab4Feed'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish build artifacts'
+  inputs:
+    PathtoPublish: '$(packageOutput)'
+    ArtifactName: 'NuGetPackage'
+    publishLocation: 'Container'
